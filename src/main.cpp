@@ -317,16 +317,14 @@ void setup()
 
 void loop() 
 {
-    mngr.run();
     Particle.process();
-
+    mngr.run();
+    
     // Related to Quick mode feature
     if (modeChangePending)
     {
-        modeChangePending = false;
-        if (!mngr.isLedBlinking())
-            mngr.btnCycleModes();
+        modeChangePending = false;       
+        // if (!mngr.isLedBlinking())
+        mngr.btnCycleModes();
     }
 }
-
-

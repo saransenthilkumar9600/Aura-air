@@ -1,37 +1,37 @@
-c:/Users/saran/Desktop/aura_firmware_updated/target/3.0.0/p1//obj/src/user_export.o: \
+c:/Users/ilya/Desktop/projects/aura_firmware/target/3.0.0/p1//obj/src/user_export.o: \
  src/user_export.c \
  ../../../modules/shared/stm32f2xx/inc/user_part_export.c \
  ../../../modules/shared/stm32f2xx/inc/module_user_init.h \
  ../../../dynalib/inc/dynalib.h ../../../system/inc/system_user.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stdbool.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stddef.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\string.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_ansi.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\newlib-nano\newlib.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_newlib_version.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\config.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\ieeefp.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\features.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\reent.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_ansi.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_types.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\_types.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\_default_types.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\lock.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\cdefs.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\xlocale.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\strings.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\string.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stdbool.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stddef.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\string.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_ansi.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\newlib-nano\newlib.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_newlib_version.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\config.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\ieeefp.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\features.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\reent.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_ansi.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_types.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\_types.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\_default_types.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\lock.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\cdefs.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\xlocale.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\strings.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\string.h \
  ../../../hal/inc/core_hal.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stdint.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\stdint.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_intsup.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_stdint.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stdint.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\stdint.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_intsup.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_stdint.h \
  ../../../hal/inc/watchdog_hal.h ../../../hal/inc/core_subsys_hal.h \
  ../../../hal/inc/interrupts_hal.h ../../../hal/shared/platforms.h \
  ../../../hal/src/stm32/interrupts_irq.h \
  ../../../services/inc/static_assert.h \
- c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\assert.h \
+ c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\assert.h \
  ../../../platform/MCU/STM32F2xx/CMSIS/Device/ST/Include/stm32f2xx.h \
  ../../../platform/MCU/STM32F2xx/CMSIS/Include/core_cm3.h \
  ../../../platform/MCU/STM32F2xx/CMSIS/Include/core_cmInstr.h \
@@ -79,53 +79,53 @@ c:/Users/saran/Desktop/aura_firmware_updated/target/3.0.0/p1//obj/src/user_expor
 
 ../../../system/inc/system_user.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stdbool.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stdbool.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stddef.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stddef.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\string.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\string.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_ansi.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_ansi.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\newlib-nano\newlib.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\newlib-nano\newlib.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_newlib_version.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_newlib_version.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\config.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\config.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\ieeefp.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\ieeefp.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\features.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\features.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\reent.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\reent.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_ansi.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\_ansi.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_types.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_types.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\_types.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\_types.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\_default_types.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\machine\_default_types.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\lock.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\lock.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\cdefs.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\cdefs.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\xlocale.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\xlocale.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\strings.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\strings.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\string.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\string.h:
 
 ../../../hal/inc/core_hal.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stdint.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\lib\gcc\arm-none-eabi\9.2.1\include\stdint.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\stdint.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\stdint.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_intsup.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_intsup.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_stdint.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_stdint.h:
 
 ../../../hal/inc/watchdog_hal.h:
 
@@ -139,7 +139,7 @@ c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\sys\_std
 
 ../../../services/inc/static_assert.h:
 
-c:\users\saran\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\assert.h:
+c:\users\ilya\.particle\toolchains\gcc-arm\9.2.1\arm-none-eabi\include\assert.h:
 
 ../../../platform/MCU/STM32F2xx/CMSIS/Device/ST/Include/stm32f2xx.h:
 

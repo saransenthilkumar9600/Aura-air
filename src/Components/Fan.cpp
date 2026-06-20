@@ -2,6 +2,10 @@
 
 Fan *Fan::instance = nullptr;
 int Fan::rpmCounter = 0;
+volatile uint32_t Fan::rpmPulseCount = 0;
+uint32_t          Fan::rpmWindowStart = 0;
+uint16_t          Fan::lastCalculatedRpm = 0;
+bool              Fan::tachoAttached = false;
 
 Fan::Fan() : pid(PIDImpl(500, -500, 0.5, 0.0, 0.0))
 {
@@ -40,6 +44,10 @@ void Fan::setup()
 
     analogWriteResolution(FAN_PIN, 8);
     analogWrite(FAN_PIN, 255, 1000);
+
+    // Attach tacho ISR once — runs forever, non-blocking
+    attachInterrupt(FAN_TACHO, rpmCounterIsr, RISING);
+    rpmWindowStart = millis();
 }
 
 
@@ -68,13 +76,21 @@ void Fan::restoreSwitchState()
     #endif
 }
 
+// non-blocking
 uint16_t Fan::getFanRpm()
 {
-    rpmCounter = 0;
-    attachInterrupt(FAN_TACHO, rpmCounterIsr, RISING);
-    delay(1000);
-    detachInterrupt(FAN_TACHO);
-    return (rpmCounter * 60) / 2;
+    uint32_t now = millis();
+    uint32_t elapsed = now - rpmWindowStart;
+
+    if (elapsed >= 1000)   // compute every 1 second window
+    {
+        uint32_t pulses = rpmPulseCount;   // snapshot
+        rpmPulseCount = 0;                 // reset counter
+        rpmWindowStart = now;
+        lastCalculatedRpm = (pulses * 60) / 2;
+    }
+
+    return lastCalculatedRpm;
 }
 
 void Fan::rpmCounterIsr()
@@ -194,7 +210,7 @@ void Fan::setFanSpeed(uint8_t pwmSpeed)
     }
     else
     {
-         if(this->drivePid = false)
+         if(this->drivePid == false)
         {
             this->drivePid = true;
         }
