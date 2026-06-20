@@ -1,0 +1,124 @@
+#ifndef ENUMS_H
+#define ENUMS_H
+
+
+enum SysModeCommStatus
+{
+    WRONG_COMM = 0,
+    COMM_SUCCESS = 1,
+    WRONG_DEFAULT_MODE,
+    CANT_TURN_OFF_MODE_THAT_IS_NOT_ON,
+    WRONG_PERIOD,
+    NO_SCHED_TO_DELETE,
+    WRONG_NIGHT_MODE_INPUT,
+    WRONG_SCHEDULER_INPUT,
+    WRONG_HIGH_MODE_INPUT,
+    WRONG_LOW_MODE_INPUT,
+    WRONG_SILENT_MODE_INPUT,
+    WROING_QUICK_MODE_INPUT,
+    QUICK_MODE_ALREADY_ACTIVATED,
+    WRONG_FAN_MODE_INPUT,
+    WRONG_AUTO_SILENT_INPUT
+};
+
+
+enum SysMode
+{
+    NOT_INIT = -1,
+    AUTO_M,
+    HIGH_M, //FS - 5
+    LOW_M, //FS - 3
+    NIGHT_M, //SCHEDULER ONLY
+    SCHEDULER_M,
+    SILENT_M, //FS - 1
+    MANUAL_1_M, //FS - 2
+    OFF_M, //STANDBY
+    MANUAL_2_M, //FS - 4
+    MANUAL_3_M, //FS - 6
+    AUTO_SILENT,
+    QUICK_M
+};
+
+
+enum SchedPosition
+{
+    FIRST = 0,
+    SECOND,
+    THIRD,
+    FOURTH,
+    FIFTH,
+    SIXTH
+};
+
+
+enum SchedSize
+{
+    EMPTY = 0,
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX
+};
+
+
+enum SysEvent
+{
+    COVER_OPEN = 1,
+    COVER_CLOSE,
+    ENTER_AUTO_M,
+    ENTER_HIGH_M,
+    ENTER_LOW_M = 5,
+    ENTER_QUICK_M,
+    ENTER_SILENT_M,
+    EXIT_SILENT_M,
+    ENTER_NIGHT_M,
+    EXIT_NIGHT_M = 10,
+    ENTER_OFF_M,
+    AQI_LESS_50,
+    AQI_LESS_100,
+    AQI_LESS_200,
+    AQI_LESS_500  = 15,
+    LED_ON,
+    LED_OFF,
+    STERIO_AUTO,
+    STERIO_CONST_ON,
+    STERIO_CONST_OFF = 20,
+    UVC_AUTO,
+    UVC_CONST_ON,
+    UVC_CONST_OFF,
+    ENTER_LISTENING_M,
+    FAN_AUTO = 25,
+    FAN_MANU_BY_PID,
+    FAN_MANU_BY_PWM,
+    AUTO_SILENT_ON,
+    AUTO_SILENT_OFF,
+    ENTER_MANUAL_1_M = 30,
+    ENTER_MANUAL_2_M,
+    ENTER_MANUAL_3_M,
+    // Button blink feedback — values 33-37
+    // 1–32 MUST NOT be renumbered (cloud publish uses them)
+    BTN_BLINK_1_BLUE    = 33,  // Quiet:     1 pulse blue,   LED off  after
+    BTN_BLINK_2_BLUE,          // Regular:   2 pulses blue,  LED on   after
+    BTN_BLINK_3_BLUE,          // Maximized: 3 pulses blue,  LED on   after
+    BTN_BLINK_4_BLUE,          // Auto:      4 pulses blue,  LED on   after
+    BTN_BLINK_3_ORANGE         // Off:       3 pulses orange LED off  after
+};
+
+
+
+enum SensorErr
+{
+    SETUP_ERR,
+    I2C_END_TRANSMISSION_ERR,
+    I2C_REQUEST_FROM_ERR,
+    CRC_ERR,
+    HUMIDITY_COMPENSTATION_FAILED,
+    DATA_NOT_READY,
+    SERIAL_NOT_AVAILABLE_MORE_THEN_5_TIMES,
+    NO_ERR
+};
+
+
+#endif
