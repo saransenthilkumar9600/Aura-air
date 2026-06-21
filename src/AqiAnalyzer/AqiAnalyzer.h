@@ -37,6 +37,7 @@ private:
     int16_t Eco2Arr[ECO2_ARRAY_SIZE];
     uint8_t count = 0;
     unsigned long lastSensorsDataPublishedTimestamp;
+    SysEvent lastFiredAqiEvent;
     callbackFunc execComponentsChainCallback;
 
     AqiAnalyzer();

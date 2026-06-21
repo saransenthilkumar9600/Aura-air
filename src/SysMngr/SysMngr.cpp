@@ -71,6 +71,8 @@ void SysMngr::run()
     this->led.applySchedulerCheck();
 
     this->aqiLyzer.run();
+
+    this->fan.runPid();
 }
 
 
@@ -140,6 +142,7 @@ void SysMngr::btnCycleModes()
     if (cycle[nextPos] == SysMode::AUTO_M)
         this->execComponentsChain(SysEvent::ENTER_AUTO_M);
 
+    if (Particle.connected())
     Publisher::publishEvent('S', "1.9.1", "support.button",
         "Button cycled to: " + String((int8_t)cycle[nextPos]));
 }
@@ -219,7 +222,7 @@ int SysMngr::printEeprom(String data)
 
 int SysMngr::getModeFromString(String data)
 {
-    uint8_t mode;
+    uint8_t mode = 0xFF;
 
     String firstTwoLetters = data.substring(0, 2);
     //support 2 letter digits as well.
@@ -251,7 +254,7 @@ int SysMngr::setSystemMode(String data)
     Publisher::publishEvent('S', "1.1.1", "support.modes", data);
     //support 2 letter digits.
     uint8_t mode = getModeFromString(data);
-    
+    if (mode == 0xFF) return SysModeCommStatus::WRONG_COMM;
     if (mode == SysMode::AUTO_SILENT)
     {
         data.remove(0, 3);
@@ -266,6 +269,7 @@ int SysMngr::setSystemMode(String data)
             Publisher::publishEvent('S', "1.1.19", "support.modes", "Set auto silent mode off");
         } 
         else return SysModeCommStatus::WRONG_AUTO_SILENT_INPUT;
+        return SysModeCommStatus::COMM_SUCCESS;
     }
     if (mode == SysMode::HIGH_M)
     {
@@ -333,7 +337,7 @@ int SysMngr::setSystemMode(String data)
     {
         if (data.length() < 17 && data != "4_0") return SysModeCommStatus::WRONG_SCHEDULER_INPUT;
 
-        uint8_t undScrCount = 0, undScrIdx = 0, tildaIdx = 0, generalIdx = 0;
+        uint8_t undScrCount = 0,tildaIdx = 0, generalIdx = 0;
         const char spliter = '_', tilda = '~';
 
         char stimeArr[6][6];
@@ -524,7 +528,7 @@ int SysMngr::setTimeZone(String data)
         // Restoring timezone data from the EEPROM (if it's stored)
         int8_t timezone;
         EepromMngr::get("timezone", NULL, NULL, &timezone);
-        if (timezone != NULL) 
+        if (timezone != 0) 
         {
             #ifdef LOGGING_SYSMNGR
                 Log.info("[SysMngr::setup] - Restored timezone is: %d", timezone);
