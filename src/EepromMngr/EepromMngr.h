@@ -54,14 +54,14 @@ struct EepromContent
         TmpSchedulerData *schedulerDataArr;
         int8_t defaultMode;
         int8_t currentMode;
+        bool fanSwitch;
         bool autoSilentSwitch;
         bool ledSwitch;
         int8_t timezone;
-        bool fanSwitch;
         LedSchedulerTmp ledScheduler;
 
         EepromTmpSavedContent() : schedSize((uint8_t)SchedSize::EMPTY), schedPosition((uint8_t)SchedPosition::FIRST), 
-                                defaultMode((int8_t)SysMode::LOW_M), currentMode((int8_t)SysMode::LOW_M), ledSwitch(true), timezone(NULL), fanSwitch(true), autoSilentSwitch(false) {}
+                                defaultMode((int8_t)SysMode::LOW_M), currentMode((int8_t)SysMode::LOW_M),fanSwitch(true),autoSilentSwitch(false),ledSwitch(true),timezone(0) {}
     };
 #endif
 

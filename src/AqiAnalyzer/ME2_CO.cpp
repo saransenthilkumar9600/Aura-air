@@ -9,6 +9,8 @@ ME2_CO::ME2_CO()
     this->setupAttempts = 3;
     this->setupSucceeded = false;
     this->lastMeasurement = 0;
+    this->setupTimestamp = 0;
+    
 }
 
 SensorErr ME2_CO::measure(void)
@@ -34,6 +36,7 @@ void ME2_CO::run(void)
         {
             this->setupSucceeded = true;
             this->doSetup = false;
+            this->setupTimestamp = millis();
 
             #ifdef LOGGING_CO
                 Log.trace("[ME2_CO::run] - Setup succeeded");
@@ -49,7 +52,7 @@ void ME2_CO::run(void)
         }
     }
 
-	if (this->setupSucceeded && (millis() - this->lastMeasurement >= ME2_CO_SAMPLE_TIME || this->lastMeasurement == 0))
+	if (this->setupSucceeded && (millis() - this->setupTimestamp >= 180000) &&(millis() - this->lastMeasurement >= ME2_CO_SAMPLE_TIME || this->lastMeasurement == 0))
 	{
         if (this->measure() != SensorErr::NO_ERR)
         {

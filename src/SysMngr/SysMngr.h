@@ -42,6 +42,7 @@ public:
     void execComponentsChain(SysEvent);
     void btnCycleModes();
     bool isLedBlinking() { return this->led.isBlinking(); }
+    bool isBlinkActive()  { return this->led.isBlinking(); }
     int printEeprom(String);
     int getModeFromString(String);
     int setSystemMode(String);

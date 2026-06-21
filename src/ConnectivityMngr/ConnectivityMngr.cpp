@@ -224,7 +224,7 @@ void extractCreds(String rawCreds, char creds[2][25])
 
 void ConnectivityMngr::setNewCreds(String rawCreds)
 {
-    WiFiAccessPoint ap[5];
+    //WiFiAccessPoint ap[5];
     char creds[2][25];
 
     extractCreds(rawCreds, creds);

@@ -45,7 +45,7 @@ STARTUP(System.enableFeature(FEATURE_RESET_INFO); earlySetup(););
 String macAddrs = "";
 SerialLogHandler logHandler(LOG_LEVEL_ALL, {{ "app", LOG_LEVEL_ALL }, { "app.network", LOG_LEVEL_ALL } });
 SysMngr mngr;
-volatile bool modeChangePending = false;
+volatile uint8_t pendingBtnPresses = 0;
 // Related to Quick mode feature
 // bool quickModeFlag = false;
 
@@ -248,7 +248,7 @@ void networkStatusHandler(system_event_t e, int param)
 // Related to Quick mode feature
 void btnClickHandler(system_event_t, int param)
 {
-    if (system_button_clicks(param) == 1) modeChangePending  = true;
+    if (system_button_clicks(param) == 1) pendingBtnPresses++;
 }
 
 
@@ -317,14 +317,13 @@ void setup()
 
 void loop() 
 {
-    mngr.run();
     Particle.process();
-
+    mngr.run();
+    
     // Related to Quick mode feature
-    if (modeChangePending)
+    if (pendingBtnPresses > 0 && !mngr.isBlinkActive())
     {
-        modeChangePending = false;
-        if (!mngr.isLedBlinking())
-            mngr.btnCycleModes();
+        pendingBtnPresses--;
+        mngr.btnCycleModes();
     }
 }
