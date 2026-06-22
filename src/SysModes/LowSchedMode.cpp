@@ -33,7 +33,7 @@ void LowSchedMode::redefineTimer()
         #ifdef LOGGING_LOWMODE
             Log.trace("[LowSchedMode::redefineTimer] - Checking if needed to update the tmp-period in EEPROM");
         #endif
-        float tmpTmpPeriod = 0;
+        float tmpTmpPeriod = NULL;
         EepromMngr::get("scheduler", "sched" + String(this->mmPtr->getScheduler().pos + 1), "tmp-period", &tmpTmpPeriod);
         if (tmpTmpPeriod > 0.0)
         {

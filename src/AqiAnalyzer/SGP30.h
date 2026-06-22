@@ -20,7 +20,6 @@ private:
     const uint8_t init_air_quality[2]          = {0x20, 0x03};
     const uint8_t measure_air_quality[2]       = {0x20, 0x08};
     int16_t voc, eco2;
-    uint32_t setupTimestamp; 
     bool doSetup, setupSucceeded;
     uint8_t setupAttempts;
     unsigned long lastMeasurement;

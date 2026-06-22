@@ -18,14 +18,13 @@
 class ConnectivityMngr
 {
 private:
-    
+    static ConnectivityMngr *instance;
+    SysModesMngr &modesMngr;
     Led &led;
     Sterionizer &sterio;
     Uvc &uvc;
     CoverMngr &coverMngr;
     RecoverMngr &recovMngr;
-    SysModesMngr &modesMngr;
-    static ConnectivityMngr *instance;
     Timer *reconnectTimer;
     bool wasInListeningModeFlag, triedToConnect, turnOffWifiFlag;
     String cloudVarSsid, cloudVarEepromConent;

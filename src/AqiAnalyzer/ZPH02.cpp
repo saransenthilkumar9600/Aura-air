@@ -9,7 +9,7 @@ ZPH02::ZPH02()
     this->pm2              = 0;
     this->pm10             = 0;
     this->hasValidReading  = false;      // stays false until first checksum-passing packet
-    memset(this->incomingData, 0, sizeof(this->incomingData));
+    this->incomingData[9]  = {0};
 }
 
 

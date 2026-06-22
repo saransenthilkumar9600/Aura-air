@@ -46,7 +46,6 @@ public:
     void startBlink(uint8_t total, bool isBlue, bool leaveOn);
     void runBlinkTick();
     bool isBlinking() { return this->blinkActive; }
-    bool isBlinkActive() const { return this->blinkActive; } 
 };
 
 #endif

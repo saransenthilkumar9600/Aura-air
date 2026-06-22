@@ -2,10 +2,6 @@
 
 Fan *Fan::instance = nullptr;
 int Fan::rpmCounter = 0;
-volatile uint32_t Fan::rpmPulseCount = 0;
-uint32_t          Fan::rpmWindowStart = 0;
-uint16_t          Fan::lastCalculatedRpm = 0;
-bool              Fan::tachoAttached = false;
 
 Fan::Fan() : pid(PIDImpl(500, -500, 0.5, 0.0, 0.0))
 {
@@ -44,27 +40,7 @@ void Fan::setup()
 
     analogWriteResolution(FAN_PIN, 8);
     analogWrite(FAN_PIN, 255, 1000);
-
-    // Attach tacho ISR once — runs forever, non-blocking
-    attachInterrupt(FAN_TACHO, rpmCounterIsr, RISING);
-    rpmWindowStart = millis();
 }
-
-
-void Fan::runPid()
-{
-    if (this->drivePid)
-        this->_drivePid();
-
-    if (millis() - this->lastFanInspection > FAN_INSPEC_INTERVAL)
-    {
-        this->lastFanInspection = millis();
-        uint16_t rpm = this->getFanRpm();
-        if (!this->coverOpen && this->drivePid && rpm == 0)
-            Publisher::publishEvent('S', "1.4.1", "support.fan", "Fan doesn't work properly");
-    }
-}
-
 
 
 /**
@@ -92,26 +68,18 @@ void Fan::restoreSwitchState()
     #endif
 }
 
-// non-blocking
 uint16_t Fan::getFanRpm()
 {
-    uint32_t now = millis();
-    uint32_t elapsed = now - rpmWindowStart;
-
-    if (elapsed >= 1000)   // compute every 1 second window
-    {
-        uint32_t pulses = rpmPulseCount;   // snapshot
-        rpmPulseCount = 0;                 // reset counter
-        rpmWindowStart = now;
-        lastCalculatedRpm = (pulses * 60) / 2;
-    }
-
-    return lastCalculatedRpm;
+    rpmCounter = 0;
+    attachInterrupt(FAN_TACHO, rpmCounterIsr, RISING);
+    delay(1000);
+    detachInterrupt(FAN_TACHO);
+    return (rpmCounter * 60) / 2;
 }
 
 void Fan::rpmCounterIsr()
 {
-    rpmPulseCount++;
+    rpmCounter++;
 }
 
 void Fan::_drivePid()
@@ -226,7 +194,7 @@ void Fan::setFanSpeed(uint8_t pwmSpeed)
     }
     else
     {
-         if(this->drivePid == false)
+         if(this->drivePid = false)
         {
             this->drivePid = true;
         }
@@ -417,6 +385,13 @@ void Fan::handleEvent(SysEvent e)
     if (this->drivePid)
         this->_drivePid();
 
+    if (millis() - this->lastFanInspection > FAN_INSPEC_INTERVAL)
+    {
+        if (!this->coverOpen && this->drivePid && this->getFanRpm() == 0)
+            Publisher::publishEvent('S', "1.4.1", "support.fan", "Fan doesn't work properly");
+
+        this->lastFanInspection = millis();
+    }
 
     Components::handleEvent(e);
 }

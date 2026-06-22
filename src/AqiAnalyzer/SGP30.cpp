@@ -9,7 +9,6 @@ SGP30::SGP30()
 	this->setupAttempts = 3;
 	this->setupSucceeded = false;
 	this->lastMeasurement = 0;
-	this->setupTimestamp = 0;
 }
 
 
@@ -201,7 +200,6 @@ void SGP30::run(float temperature, float humidity)
         {
             this->setupSucceeded = true;
             this->doSetup = false;
-			this->setupTimestamp = millis();
 
             #ifdef LOGGING_SGP30
                 Log.trace("[SGP30::run] - Setup succeeded");
@@ -218,7 +216,7 @@ void SGP30::run(float temperature, float humidity)
         }
     }
 
-	if (this->setupSucceeded && (millis() - this->setupTimestamp >= 15000) && (millis() - this->lastMeasurement >= SGP30_SAMPLE_TIME || this->lastMeasurement == 0))
+	if (this->setupSucceeded && (millis() - this->lastMeasurement >= SGP30_SAMPLE_TIME || this->lastMeasurement == 0))
 	{
         if (this->measure(temperature, humidity) != SensorErr::NO_ERR)
         {

@@ -45,11 +45,6 @@ private:
     double tmpFanSpeed;
     uint16_t fanSpeedArr[FAN_SPEEDS_ARR_SIZE];
     uint8_t fanArrCurrIdx, pwm;
-    // Non-blocking RPM measurement
-    static volatile uint32_t rpmPulseCount;
-    static uint32_t          rpmWindowStart;
-    static uint16_t          lastCalculatedRpm;
-    static bool              tachoAttached;
     bool inSysMode, coverOpen, drivePid, isAutoSilent;
     double currRpm, destRpm;
     unsigned long lastPidCompute;
@@ -73,7 +68,6 @@ public:
     void restoreSwitchState();
     SysEvent getSwitchState() { return this->constSwitch; };
     void handleEvent(SysEvent);
-    void runPid();
 };
 
 #endif

@@ -324,7 +324,7 @@ SysModeCommStatus SysModesMngr::delScheduler()
     for (uint8_t i=0; i<lastSize; i++)
     {
         EepromMngr::set("scheduler", "sched" + String(i + 1), "whoami", (int8_t)this->sched.schedPool[i]->whoami);
-        EepromMngr::set("scheduler", "sched" + String(i + 1), "start-time", "00:00");
+        EepromMngr::set("scheduler", "sched" + String(i + 1), "start-time", (int8_t)NULL);
         EepromMngr::set("scheduler", "sched" + String(i + 1), "period", this->sched.schedPool[i]->period);
         if (i+1 == 1)
             EepromMngr::set("scheduler", "sched" + String(i + 1), "tmp-period", this->sched.schedPool[i]->tmpPeriod);
@@ -395,35 +395,12 @@ SysModeCommStatus SysModesMngr::setDefaultMode(SysMode mode)
                 Publisher::publishEvent('S', "1.1.22", "support.modes", "Enter manual 3 mode");
                 break;
             }
-             case SysMode::AUTO_M:
-            {
-                bool autoSilentSwitch;
-                EepromMngr::get("active-mode", "auto-silent-switch", NULL, &autoSilentSwitch);
-                if (autoSilentSwitch) 
-                {
-                    this->execComponentsChainCallback(SysEvent::AUTO_SILENT_ON);
-                    Publisher::publishEvent('S', "1.1.18", "support.modes", "Set auto silent mode on");
-                } 
-                else
-                 {
-                    this->execComponentsChainCallback(SysEvent::AUTO_SILENT_OFF);
-                    Publisher::publishEvent('S', "1.1.19", "support.modes", "Set auto silent mode off");
-                    }
-                this->execComponentsChainCallback(SysEvent::ENTER_AUTO_M);
-                Publisher::publishEvent('S', "1.1.0", "support.modes", "Enter auto mode");
-                break;
-            }
-
-            
-
             default:
                 break;
         }
 
-        
+        EepromMngr::set("active-mode", "current", NULL, (int8_t)mode);
     }
-
-    EepromMngr::set("active-mode", "current", NULL, (int8_t)mode);
 
     Publisher::publishEvent('S', "1.1.2", "support.modes", "Default mode was set to: " + String(mode));
 
