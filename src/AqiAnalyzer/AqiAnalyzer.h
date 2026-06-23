@@ -13,9 +13,9 @@ using namespace std;
 
 
 // #define LOGGING_AQILYZER
-#define MOVING_AVG_SIZE       10
+#define MOVING_AVG_SIZE       5
 #define ECO2_ARRAY_SIZE       50
-#define PUBLISH_DATA_INTERVAL 10000
+#define PUBLISH_DATA_INTERVAL 1000
 
 
 typedef std::function<void(SysEvent)> callbackFunc;
@@ -37,6 +37,7 @@ private:
     int16_t Eco2Arr[ECO2_ARRAY_SIZE];
     uint8_t count = 0;
     unsigned long lastSensorsDataPublishedTimestamp;
+    SysEvent lastFiredAqiEvent;
     callbackFunc execComponentsChainCallback;
 
     AqiAnalyzer();

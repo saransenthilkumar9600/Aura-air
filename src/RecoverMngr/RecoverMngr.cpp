@@ -132,7 +132,7 @@ void RecoverMngr::resetRecover()
         }
         else // If no, increase the counter and update the 'lastReset' time.
         {
-            if (Time.now() - lastReset <= 120)
+            if (Time.now() - lastReset <= 600)
             {
                 EEPROM.write(EEPROM_RESET_COUNTER_ADDRS, (uint8_t)(currResetCounter + 1));
                 EEPROM.put(EEPROM_RESET_LAST_EVT_ADDRS, (unsigned long)Time.now());

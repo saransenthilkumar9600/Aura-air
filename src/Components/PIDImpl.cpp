@@ -1,7 +1,7 @@
 #include "PIDImpl.h"
 
 
-PIDImpl::PIDImpl(double max, double min, double Kp, double Kd, double Ki) : _max(max), _min(min), _Kp(Kp), _Kd(Kd), _Ki(Ki), _pre_error(0), _integral(0), t(millis())
+PIDImpl::PIDImpl(double max, double min, double Kp, double Kd, double Ki) : t(millis()),_max(max), _min(min), _Kp(Kp), _Kd(Kd), _Ki(Ki), _pre_error(0), _integral(0) 
 {}
 
 

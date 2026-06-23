@@ -199,32 +199,42 @@ void ConnectivityMngr::removeCreds()
 void extractCreds(String rawCreds, char creds[2][25])
 {
     char spliter = '~';
-
+    bool splitterFound = false;
     for (uint8_t i = 0; i < rawCreds.length(); i++)
     {
         if (rawCreds.charAt(i) != spliter)
         {
+            if (i < 24)
             creds[0][i] = rawCreds.charAt(i);
         }
-        else if (rawCreds.charAt(i) == spliter)
+        else 
         {
+            creds[0][i < 24 ? i : 24] = '\0';    // null-terminate at splitter pos, clamped to valid index
             rawCreds = rawCreds.remove(0, i+1);
-            creds[0][i] = '\0';
+            splitterFound = true;
             break;
         }
     }
 
+    if (!splitterFound) 
+    {
+        creds[0][24] = '\0'; // force-terminate SSID
+        creds[1][0]  = '\0'; // empty password
+        return; 
+    }
+
     for (uint8_t i=0; i<rawCreds.length(); i++)
     {
+        if (i < 24)
         creds[1][i] = rawCreds.charAt(i);
     }
-    creds[1][rawCreds.length()] = '\0';
+    creds[1][rawCreds.length() < 25 ? rawCreds.length() : 24] = '\0'; 
 }
 
 
 void ConnectivityMngr::setNewCreds(String rawCreds)
 {
-    WiFiAccessPoint ap[5];
+    //WiFiAccessPoint ap[5];
     char creds[2][25];
 
     extractCreds(rawCreds, creds);

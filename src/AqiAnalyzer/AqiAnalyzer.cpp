@@ -14,6 +14,7 @@ AqiAnalyzer::AqiAnalyzer() : fan(Fan::getInstance())
     for (uint8_t j = 0; j < ECO2_ARRAY_SIZE; j++){
         this->Eco2Arr[j] = 0;
     }
+     this->lastFiredAqiEvent = SysEvent::AQI_LESS_50;
 }
 
 
@@ -85,17 +86,23 @@ void AqiAnalyzer::run()
 
     if (millis() - this->lastSensorsDataPublishedTimestamp > PUBLISH_DATA_INTERVAL)
     {
+        this->lastSensorsDataPublishedTimestamp = millis();
+        
+        this->Eco2Arr[count] = this->sgp30.getEco2();
+        this->count++;
+
+        if(this->count >= ECO2_ARRAY_SIZE)
+            this->count = 0;
+         
+        if (Particle.connected()) 
+        {
         #ifdef LOGGING_AQILYZER
             Log.trace("[AqiAnalyzer::run] - Publishing sensors data to cloud");
         #endif
-
+        
         char tmpSensorsData[550];
-        this->Eco2Arr[count] = this->sgp30.getEco2();
-            count++;
-
-        {
             // v1:temp, v2:humid, v3:Co2, v4:tvoc, v5:pm2, v6:pm10, v7:dominent pollutant , v8:aqi, v9:co, v10:current fan speed
-        snprintf(tmpSensorsData, sizeof(tmpSensorsData), "{\"v1\":%.1f, \"v2\":%.1f, \"v3\":%d, \"v4\":%d, \"v5\":%d, \"v6\":%d, \"v7\":\"%c%c\", \"v8\":%.1f, \"v9\":%.1f, \"v10\":%d, \"v11\": [%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d] }",
+            snprintf(tmpSensorsData, sizeof(tmpSensorsData), "{\"v1\":%.1f, \"v2\":%.1f, \"v3\":%d, \"v4\":%d, \"v5\":%d, \"v6\":%d, \"v7\":\"%c%c\", \"v8\":%.1f, \"v9\":%.1f, \"v10\":%d, \"v11\": [%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d] }",
             this->hdc1080.getTemperature(), this->hdc1080.getHumidity(),
             this->sgp30.getEco2(), this->sgp30.getTvoc(),
             // v5/v6: publish -1 when ZPH02 has not yet confirmed a valid packet
@@ -114,16 +121,15 @@ void AqiAnalyzer::run()
             this->Eco2Arr[30], this->Eco2Arr[31], this->Eco2Arr[32], this->Eco2Arr[33], this->Eco2Arr[34], this->Eco2Arr[35], this->Eco2Arr[36], this->Eco2Arr[37], this->Eco2Arr[38], this->Eco2Arr[39],
             this->Eco2Arr[40], this->Eco2Arr[41], this->Eco2Arr[42], this->Eco2Arr[43], this->Eco2Arr[44], this->Eco2Arr[45], this->Eco2Arr[46], this->Eco2Arr[47], this->Eco2Arr[48], this->Eco2Arr[49]);
             
-        if(count == ECO2_ARRAY_SIZE)
-            count = 0;
-        }
+        
+        
 
         Publisher::publishEvent('N', "", "", "", tmpSensorsData);
         #ifdef LOGGING_AQILYZER
             Log.trace("[AqiAnalyzer::run] - %s", tmpSensorsData);
         #endif
 
-        this->lastSensorsDataPublishedTimestamp = millis();
+        }
     }
 }
 
@@ -154,11 +160,21 @@ void AqiAnalyzer::calcAqiMovingAvg(uint16_t currAqi)
 
 void AqiAnalyzer::analyze()
 {
-    if (this->aqiMovingAvg[this->aqiMovingMvgCurrIdx] < 50.0)        this->execComponentsChainCallback(SysEvent::AQI_LESS_50);
-    else if (this->aqiMovingAvg[this->aqiMovingMvgCurrIdx] < 100.0) this->execComponentsChainCallback(SysEvent::AQI_LESS_100);
-    else if (this->aqiMovingAvg[this->aqiMovingMvgCurrIdx] < 200.0) this->execComponentsChainCallback(SysEvent::AQI_LESS_200);
-    else if (this->aqiMovingAvg[this->aqiMovingMvgCurrIdx] <= 500.0) this->execComponentsChainCallback(SysEvent::AQI_LESS_500);
+    float avg = this->aqiMovingAvg[this->aqiMovingMvgCurrIdx];
+    SysEvent newEvt;
+
+    if      (avg < 50.0f)  newEvt = SysEvent::AQI_LESS_50;
+    else if (avg < 100.0f) newEvt = SysEvent::AQI_LESS_100;
+    else if (avg < 200.0f) newEvt = SysEvent::AQI_LESS_200;
+    else                   newEvt = SysEvent::AQI_LESS_500;
+
+    if (newEvt != this->lastFiredAqiEvent)
+    {
+        this->lastFiredAqiEvent = newEvt;
+        this->execComponentsChainCallback(newEvt);
+    }
 }
+
 
 
 uint16_t AqiAnalyzer::getCo2AqiClass(int16_t Eco2)

@@ -33,7 +33,7 @@ void NightSchedMode::redefineTimer()
         #ifdef LOGGING_NIGHTMODE
             Log.trace("[NightSchedMode::redefineTimer] - Checking if needed to update the tmp-period in EEPROM");
         #endif
-        float tmpTmpPeriod = NULL;
+        float tmpTmpPeriod = 0;
         EepromMngr::get("scheduler", "sched" + String(this->mmPtr->getScheduler().pos + 1), "tmp-period", &tmpTmpPeriod);
         if (tmpTmpPeriod > 0.0)
         {
