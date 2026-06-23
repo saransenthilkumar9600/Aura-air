@@ -75,15 +75,10 @@ bool ConnectivityMngr::delMfgCreds()
 }
 
 
-void ConnectivityMngr::registerCloudVariables()
+bool ConnectivityMngr::connectivityProcedure()
 {
     Particle.variable("SSID", this->cloudVarSsid);
     Particle.variable("EEPROMContent", this->cloudVarEepromConent);
-}
-
-
-bool ConnectivityMngr::connectivityProcedure()
-{
     // The following Cloud Variables does not work perfect (NOT BECAUSE OF ME)
     // Particle.variable("sterionizerState", this->sterio.getSterioState());
     // Particle.variable("uvcState", this->uvc.getUvcState());

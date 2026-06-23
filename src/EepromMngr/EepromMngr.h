@@ -11,11 +11,7 @@
 // #define LOGGING_EEPROM
 #define EEPROM_IS_DEFINED_ADDRS  1
 #define EEPROM_DATA_OBJ_ADDRS    2
-#define EEPROM_PANIC_COUNTER_ADDRS   1000  // 1 byte
-#define EEPROM_PANIC_LAST_EVT_ADDRS  1001  // 4 bytes (unsigned long), 1001-1004
-#define EEPROM_RESET_COUNTER_ADDRS   1005  // 1 byte
-#define EEPROM_RESET_LAST_EVT_ADDRS  1006  // 4 bytes (unsigned long), 1006-1009
-#define EEPROM_REINIT_FLAG_ADDRS     2044  // Max is 2047. Bump address to force reinit on FW upgrade
+#define EEPROM_REINIT_FLAG_ADDRS 2043  // Max is 2047. range 2042-2047
 #define SAVE_PREV_EEPROM_DATA    true
 #define JSON_DOC_SIZE            1200
 #define EEPROM_CONTENT_SIZE      900

@@ -37,15 +37,14 @@ void loop();
 #if HW_VER == 1
     PRODUCT_ID(9494);
 #endif
-PRODUCT_VERSION(56);
+PRODUCT_VERSION(52);
 SYSTEM_THREAD(ENABLED);
-SYSTEM_MODE(AUTOMATIC);
+SYSTEM_MODE(MANUAL);
 STARTUP(System.enableFeature(FEATURE_RESET_INFO); earlySetup(););
 
 String macAddrs = "";
 SerialLogHandler logHandler(LOG_LEVEL_ALL, {{ "app", LOG_LEVEL_ALL }, { "app.network", LOG_LEVEL_ALL } });
 SysMngr mngr;
-volatile bool modeChangePending = false;
 // Related to Quick mode feature
 // bool quickModeFlag = false;
 
@@ -246,10 +245,10 @@ void networkStatusHandler(system_event_t e, int param)
 
 
 // Related to Quick mode feature
-void btnClickHandler(system_event_t, int param)
-{
-    if (system_button_clicks(param) == 1) modeChangePending  = true;
-}
+// void btnClickHandler(system_event_t, int param)
+// {
+//     if (system_button_clicks(param) == 1) quickModeFlag = true;
+// }
 
 
 void earlySetup()
@@ -297,12 +296,11 @@ void setup()
 
     Particle.variable("macAddrs", macAddrs);
     Particle.variable("FW_VER", FW_VER);
-    mngr.registerCloudVariables();
 
     System.set(SYSTEM_CONFIG_SOFTAP_PREFIX, "Aura");
     System.on(network_status, networkStatusHandler);
     // Related to Quick mode feature
-    System.on(button_final_click, btnClickHandler);
+    // System.on(button_final_click, btnClickHandler);
     System.disable(SYSTEM_FLAG_RESET_NETWORK_ON_CLOUD_ERRORS);
 
     RGB.control(false);
@@ -321,10 +319,9 @@ void loop()
     Particle.process();
 
     // Related to Quick mode feature
-    if (modeChangePending)
-    {
-        modeChangePending = false;
-        if (!mngr.isLedBlinking())
-            mngr.btnCycleModes();
-    }
+    // if (quickModeFlag)
+    // {
+    //     quickModeFlag = false;
+    //     setSystemMode("6_on");
+    // }
 }

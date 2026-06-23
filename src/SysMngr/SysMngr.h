@@ -37,11 +37,8 @@ private:
 public:
     SysMngr();
     void setup();
-    void registerCloudVariables();
     void run();
     void execComponentsChain(SysEvent);
-    void btnCycleModes();
-    bool isLedBlinking() { return this->led.isBlinking(); }
     int printEeprom(String);
     int getModeFromString(String);
     int setSystemMode(String);

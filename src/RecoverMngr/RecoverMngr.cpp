@@ -56,15 +56,15 @@ void RecoverMngr::panicRecover()
     uint8_t currPanicCounter;
     unsigned long lastPanic;
 
-    currPanicCounter = EEPROM.read(EEPROM_PANIC_COUNTER_ADDRS);
-    EEPROM.get(EEPROM_PANIC_LAST_EVT_ADDRS, lastPanic);
+    EepromMngr::get("panic-reset", "panic-counter", NULL, &currPanicCounter);
+    EepromMngr::get("panic-reset", "last-panic-event", NULL, &lastPanic);
 
-    if (currPanicCounter == 0 || currPanicCounter == 255)
+    if (currPanicCounter == 0)
     {
-        EEPROM.write(EEPROM_PANIC_COUNTER_ADDRS, (uint8_t)1);
-        EEPROM.put(EEPROM_PANIC_LAST_EVT_ADDRS, (unsigned long)Time.now());
-        #ifdef LOGGING_RECOV
-            Log.info("[Recover::panicRecover] - Panic events counter: %d", 1);
+        EepromMngr::set("panic-reset", "panic-counter", NULL, (uint8_t)1);
+        EepromMngr::set("panic-reset", "last-panic-event", NULL, (unsigned long)Time.now());
+        #ifdef LOGGING_RECOV 
+            Log.info("[Recover::panicRecover] - Panic events counter: %d", currPanicCounter + 1);
         #endif
     }
     else // If success, check if it's the 5th time. If yes, clear the panic reset obj and enter to safe mode.
@@ -75,8 +75,8 @@ void RecoverMngr::panicRecover()
 
         if (currPanicCounter >= 5)
         {
-            EEPROM.write(EEPROM_PANIC_COUNTER_ADDRS, (uint8_t)0);
-            EEPROM.put(EEPROM_PANIC_LAST_EVT_ADDRS, (unsigned long)0);
+            EepromMngr::set("panic-reset", "panic-counter", NULL, (uint8_t)0);
+            EepromMngr::set("panic-reset", "last-panic-event", NULL, (unsigned long)0);
             #ifdef LOGGING_RECOV
                 Log.trace("[Recover::panicRecover] - 5 panic reset events occuered. Entering to Safe Mode...");
             #endif
@@ -87,8 +87,8 @@ void RecoverMngr::panicRecover()
         {
             if (Time.now() - lastPanic <= 600) // 600 it's 10 minuts
             {
-                EEPROM.write(EEPROM_PANIC_COUNTER_ADDRS, (uint8_t)(currPanicCounter + 1));
-                EEPROM.put(EEPROM_PANIC_LAST_EVT_ADDRS, (unsigned long)Time.now());
+                EepromMngr::set("panic-reset", "panic-counter", NULL, (uint8_t)(currPanicCounter + 1));
+                EepromMngr::set("panic-reset", "last-panic-event", NULL, (unsigned long)Time.now());
                 #ifdef LOGGING_RECOV
                     Log.trace("[Recover::panicRecover] - The current panic reset event saved to EEPROM");
                 #endif
@@ -103,15 +103,15 @@ void RecoverMngr::resetRecover()
     uint8_t currResetCounter;
     unsigned long lastReset;
 
-    currResetCounter = EEPROM.read(EEPROM_RESET_COUNTER_ADDRS);
-    EEPROM.get(EEPROM_RESET_LAST_EVT_ADDRS, lastReset);
+    EepromMngr::get("user-reset", "reset-counter", NULL, &currResetCounter);
+    EepromMngr::get("user-reset", "last-reset-event", NULL, &lastReset);
 
-    if (currResetCounter == 0 || currResetCounter == 255)
+    if (currResetCounter == 0)
     {
-        EEPROM.write(EEPROM_RESET_COUNTER_ADDRS, (uint8_t)1);
-        EEPROM.put(EEPROM_RESET_LAST_EVT_ADDRS, (unsigned long)Time.now());
+        EepromMngr::set("user-reset", "reset-counter", NULL, (uint8_t)1);
+        EepromMngr::set("user-reset", "last-reset-event", NULL, (unsigned long)Time.now());
         #ifdef LOGGING_RECOV
-            Log.info("[Recover::resetRecover] - User reset events counter: %d", 1);
+            Log.info("[Recover::resetRecover] - User reset events counter: %d", currResetCounter + 1);
         #endif
     }
     else // If success, check if it's the 5th time. If yes, clear the panic reset obj and enter to safe mode.
@@ -122,8 +122,8 @@ void RecoverMngr::resetRecover()
 
         if (currResetCounter >= 5)
         {
-            EEPROM.write(EEPROM_RESET_COUNTER_ADDRS, (uint8_t)0);
-            EEPROM.put(EEPROM_RESET_LAST_EVT_ADDRS, (unsigned long)0);
+            EepromMngr::set("user-reset", "reset-counter", NULL, (uint8_t)0);
+            EepromMngr::set("user-reset", "last-reset-event", NULL, (unsigned long)0);
             #ifdef LOGGING_RECOV
                 Log.trace("[Recover::resetRecover] - 5 user reset events occuered. Entering to Safe Mode...");
             #endif
@@ -132,13 +132,13 @@ void RecoverMngr::resetRecover()
         }
         else // If no, increase the counter and update the 'lastReset' time.
         {
-            if (Time.now() - lastReset <= 120)
+            if (Time.now() - lastReset <= 120) 
             {
-                EEPROM.write(EEPROM_RESET_COUNTER_ADDRS, (uint8_t)(currResetCounter + 1));
-                EEPROM.put(EEPROM_RESET_LAST_EVT_ADDRS, (unsigned long)Time.now());
+                EepromMngr::set("user-reset", "reset-counter", NULL, (uint8_t)(currResetCounter + 1));
+                EepromMngr::set("user-reset", "last-reset-event", NULL, (unsigned long)Time.now());
                 #ifdef LOGGING_RECOV
                     Log.trace("[Recover::resetRecover] - The current user reset event saved to EEPROM");
-                #endif
+                #endif                
             }
         }
     }

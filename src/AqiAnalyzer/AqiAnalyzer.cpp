@@ -56,10 +56,8 @@ void AqiAnalyzer::run()
     uint16_t aqiArray[5];
     aqiArray[0] = getCo2AqiClass(this->sgp30.getEco2());
     aqiArray[1] = getTvocAqiClass(this->sgp30.getTvoc());
-    // Guard: only include PM readings in AQI once ZPH02 has confirmed a valid packet.
-    // Before that, pm2 = 0 which is not a real sensor value (sensor minimum is 5 µg/m³).
-    aqiArray[2] = this->zph02.isReady() ? getPm2AqiClass(this->zph02.getPm2())  : 0;
-    aqiArray[3] = this->zph02.isReady() ? getPm10AqiClass(this->zph02.getPm10()) : 0;
+    aqiArray[2] = getPm2AqiClass(this->zph02.getPm2());
+    aqiArray[3] = getPm10AqiClass(this->zph02.getPm10());
     aqiArray[4] = getCoAqiClass(this->co.getCo());
 
     // uint8_t idxOfMax = distance(aqiArray, max_element(aqiArray, aqiArray+5));
@@ -98,11 +96,7 @@ void AqiAnalyzer::run()
         snprintf(tmpSensorsData, sizeof(tmpSensorsData), "{\"v1\":%.1f, \"v2\":%.1f, \"v3\":%d, \"v4\":%d, \"v5\":%d, \"v6\":%d, \"v7\":\"%c%c\", \"v8\":%.1f, \"v9\":%.1f, \"v10\":%d, \"v11\": [%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d] }",
             this->hdc1080.getTemperature(), this->hdc1080.getHumidity(),
             this->sgp30.getEco2(), this->sgp30.getTvoc(),
-            // v5/v6: publish -1 when ZPH02 has not yet confirmed a valid packet
-            // (sensor needs up to 60s warm-up per datasheet; pm2=0 before that is not a real reading).
-            // Dashboard must treat -1 as "sensor initializing" and skip plotting that point.
-            this->zph02.isReady() ? (int16_t)this->zph02.getPm2()  : (int16_t)-1,
-            this->zph02.isReady() ? (int16_t)this->zph02.getPm10() : (int16_t)-1,
+            this->zph02.getPm2(), this->zph02.getPm10(),
             this->dp[0], this->dp[1],
             this->aqiMovingAvg[aqiMovingMvgCurrIdx] / 10.0,
             // this->currentAQI,

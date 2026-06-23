@@ -84,7 +84,7 @@ void EepromMngr::initEeprom()
 
             for (uint8_t i=0; i<instance.tmpContent.schedSize; i++)
             {
-                char schedNum[8] = "sched";
+                char schedNum[6] = "sched";
                 strcat(schedNum, String(i+1));
                 jDoc["scheduler"][schedNum]["whoami"] = instance.tmpContent.schedulerDataArr[i].whoami;
                 jDoc["scheduler"][schedNum]["start-time"] = instance.tmpContent.schedulerDataArr[i].startTime;
@@ -95,7 +95,7 @@ void EepromMngr::initEeprom()
 
             for (uint8_t i=6-(6-instance.tmpContent.schedSize); i<6; i++)
             {
-                char schedNum[8] = "sched";
+                char schedNum[6] = "sched";
                 strcat(schedNum, String(i+1));
                 jDoc["scheduler"][schedNum]["whoami"] = (int8_t)SysMode::NOT_INIT;
                 jDoc["scheduler"][schedNum]["start-time"] = NULL;
@@ -111,7 +111,7 @@ void EepromMngr::initEeprom()
 
             for (uint8_t i=0; i<6; i++)
             {
-                char schedNum[8] = "sched";
+                char schedNum[6] = "sched";
                 strcat(schedNum, String(i+1));
                 jDoc["scheduler"][schedNum]["whoami"] = (int8_t)SysMode::NOT_INIT;
                 jDoc["scheduler"][schedNum]["start-time"] = NULL;
@@ -124,6 +124,12 @@ void EepromMngr::initEeprom()
         jDoc["active-mode"]["current"] = instance.tmpContent.currentMode;
         jDoc["active-mode"]["default"] = instance.tmpContent.defaultMode;
         jDoc["active-mode"]["auto-silent-switch"] = instance.tmpContent.autoSilentSwitch;
+
+        jDoc["panic-reset"]["panic-counter"] = (uint8_t)0;
+        jDoc["panic-reset"]["last-panic-event"] = (uint8_t)0;
+
+        jDoc["user-reset"]["reset-counter"] = (uint8_t)0;
+        jDoc["user-reset"]["last-reset-event"] = (uint8_t)0;
 
         jDoc["uvc-switch"] = (uint8_t)SysEvent::UVC_AUTO;
 
@@ -146,7 +152,7 @@ void EepromMngr::initEeprom()
 
         for (uint8_t i=0; i<6; i++)
         {
-            char schedNum[8] = "sched";
+            char schedNum[6] = "sched";
             strcat(schedNum, String(i+1));
             jDoc["scheduler"][schedNum]["whoami"] = (int8_t)SysMode::NOT_INIT;
             jDoc["scheduler"][schedNum]["start-time"] = NULL;
@@ -157,6 +163,12 @@ void EepromMngr::initEeprom()
 
         jDoc["active-mode"]["current"] = (int8_t)SysMode::LOW_M;
         jDoc["active-mode"]["default"] = (int8_t)SysMode::LOW_M;
+
+        jDoc["panic-reset"]["panic-counter"] = (uint8_t)0;
+        jDoc["panic-reset"]["last-panic-event"] = (uint8_t)0;
+
+        jDoc["user-reset"]["reset-counter"] = (uint8_t)0;
+        jDoc["user-reset"]["last-reset-event"] = (uint8_t)0;
 
         jDoc["uvc-switch"] = (uint8_t)SysEvent::UVC_AUTO;
 
@@ -203,7 +215,6 @@ String EepromMngr::printEeprom()
 void EepromMngr::clearEeprom()
 {
     EEPROM.clear();
-    EepromMngr::initEeprom();
     Publisher::publishEvent('S', "1.2.1", "support.eeprom", "The EEPROM cleared successfully");
 }
 

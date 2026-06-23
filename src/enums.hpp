@@ -96,16 +96,8 @@ enum SysEvent
     AUTO_SILENT_OFF,
     ENTER_MANUAL_1_M = 30,
     ENTER_MANUAL_2_M,
-    ENTER_MANUAL_3_M,
-    // Button blink feedback — values 33-37
-    // 1–32 MUST NOT be renumbered (cloud publish uses them)
-    BTN_BLINK_1_BLUE    = 33,  // Quiet:     1 pulse blue,   LED off  after
-    BTN_BLINK_2_BLUE,          // Regular:   2 pulses blue,  LED on   after
-    BTN_BLINK_3_BLUE,          // Maximized: 3 pulses blue,  LED on   after
-    BTN_BLINK_4_BLUE,          // Auto:      4 pulses blue,  LED on   after
-    BTN_BLINK_3_ORANGE         // Off:       3 pulses orange LED off  after
+    ENTER_MANUAL_3_M
 };
-
 
 
 enum SensorErr

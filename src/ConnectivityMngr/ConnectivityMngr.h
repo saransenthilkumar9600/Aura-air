@@ -36,7 +36,6 @@ private:
 
 public:
     static ConnectivityMngr& getInstance();
-    void registerCloudVariables();
     void run();
     void removeCreds();
     void setNewCreds(String);

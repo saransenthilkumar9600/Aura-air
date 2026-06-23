@@ -15,7 +15,7 @@ using namespace std;
 // #define LOGGING_AQILYZER
 #define MOVING_AVG_SIZE       10
 #define ECO2_ARRAY_SIZE       50
-#define PUBLISH_DATA_INTERVAL 10000
+#define PUBLISH_DATA_INTERVAL 180000
 
 
 typedef std::function<void(SysEvent)> callbackFunc;

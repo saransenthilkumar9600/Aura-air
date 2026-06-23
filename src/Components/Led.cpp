@@ -11,15 +11,6 @@ Led::Led()
     this->turnOffLedFlag = false;
     this->inSysMode = false;
     this->constSwitch = SysEvent::LED_ON;
-    // Blink machine — safe defaults. Must be explicit: P1 heap objects
-    // are NOT zero-initialized. Garbage in blinkActive = false positives.
-    this->blinkActive  = false;
-    this->blinkPhase   = false;
-    this->blinkIsBlue  = true;
-    this->blinkLeaveOn = false;
-    this->blinkTotal   = 0;
-    this->blinkCount   = 0;
-    this->lastBlinkMs  = 0;
 }
 
 
@@ -128,10 +119,6 @@ void Led::applySchedulerCheck(bool force)
     lastCheck = millis();
 
     if (inSysMode) return;
-    // Real fix: applySchedulerCheck is a background maintenance task.
-    // It must yield to an active foreground blink sequence.
-    // runBlinkTick() will restore LED state correctly when blink ends.
-    if (this->blinkActive) return;
 
     bool enabled = false;
     EepromMngr::get("led_scheduler", "enabled", &enabled);
@@ -241,7 +228,6 @@ void Led::handleEvent(SysEvent e)
             if (!RGB.controlled())
             {
                 RGB.control(true);
-                
                 RGB.color(0, 0, 0);
             }
             EepromMngr::set("led-switch", "state", false);
@@ -280,18 +266,11 @@ void Led::handleEvent(SysEvent e)
         {
             this->inSysMode = false;
 
-    // Real fix: blink owns the LED for its full duration.
-    // It IS the visual confirmation of this mode change.
-    // When blink ends, runBlinkTick() sets final LED state correctly.
-    // Only restore LED state here when no blink is in progress.
-    if (!this->blinkActive)
-    {
-        bool ledSwitch;
-        EepromMngr::get("led-switch", "state", &ledSwitch);
-        if (ledSwitch && RGB.controlled())
-            RGB.control(false);
-    }
-    break;
+            bool ledSwitch;
+            EepromMngr::get("led-switch", "state", &ledSwitch);
+            if (ledSwitch && RGB.controlled())
+                RGB.control(false);
+            break;
         }
         case SysEvent::ENTER_LISTENING_M:
         {
@@ -306,85 +285,9 @@ void Led::handleEvent(SysEvent e)
             this->constSwitch = e;
             break;
         }
-            case SysEvent::BTN_BLINK_1_BLUE:
-        this->startBlink(1, true, true);   // 1 blue pulse → LED off
-        break;
-
-    case SysEvent::BTN_BLINK_2_BLUE:
-        this->startBlink(2, true, true);    // 2 blue pulses → LED on (white)
-        break;
-
-    case SysEvent::BTN_BLINK_3_BLUE:
-        this->startBlink(3, true, true);    // 3 blue pulses → LED on (white)
-        break;
-
-    case SysEvent::BTN_BLINK_4_BLUE:
-        this->startBlink(4, true, true);    // 4 blue pulses → LED on (white)
-        break;
-
-    case SysEvent::BTN_BLINK_3_ORANGE:
-        this->startBlink(3, false, true);  // 3 orange pulses → LED off
-        break;
-
-    default:
-        break;
+        default:
+            break;
     }
 
     Components::handleEvent(e);
-}
-
-// ─────────────────────────────────────────────────────────────
-// startBlink() — called once to arm the state machine
-// Takes RGB.control(true) immediately for instant first pulse
-// ─────────────────────────────────────────────────────────────
-void Led::startBlink(uint8_t total, bool isBlue, bool leaveOn)
-{
-    if (this->blinkActive) return;  // safety: never nest blinks
-
-    this->blinkTotal   = total;
-    this->blinkIsBlue  = isBlue;
-    this->blinkLeaveOn = leaveOn;
-    this->blinkCount   = 0;
-    this->blinkPhase   = true;      // begin immediately in ON phase
-    this->lastBlinkMs  = millis();
-    this->blinkActive  = true;      // arm LAST so guard is valid
-
-    RGB.control(true);
-    RGB.color(isBlue ? 0x0000FF : 0xFF5000);
-}
-
-// ─────────────────────────────────────────────────────────────
-// runBlinkTick() — called every loop() via SysMngr::run()
-// 200ms gate: ON phase → OFF phase → ON phase → ... → done
-// ─────────────────────────────────────────────────────────────
-void Led::runBlinkTick()
-{
-    if (!this->blinkActive)                        return;
-    if (millis() - this->lastBlinkMs < 200)        return;
-
-    this->lastBlinkMs = millis();
-
-    if (this->blinkPhase)
-    {
-        // ON phase complete → go to OFF
-        RGB.color(0, 0, 0);
-        this->blinkPhase = false;
-        this->blinkCount++;
-
-        if (this->blinkCount >= this->blinkTotal)
-        {
-            // All pulses done
-            this->blinkActive = false;    // disarm guard FIRST
-
-            if (this->blinkLeaveOn)
-                RGB.control(false);       // release → Particle OS white fade ✅
-            // else: RGB still controlled + black = LED stays OFF ✅
-        }
-    }
-    else
-    {
-        // OFF phase complete → next ON pulse
-        this->blinkPhase = true;
-        RGB.color(this->blinkIsBlue ? 0x0000FF : 0xFF5000);
-    }
 }

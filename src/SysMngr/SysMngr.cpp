@@ -13,12 +13,6 @@ SysMngr::SysMngr() : led(Led::getInstance()), fan(Fan::getInstance()), uvc(Uvc::
 }
 
 
-void SysMngr::registerCloudVariables()
-{
-    this->connMngr.registerCloudVariables();
-}
-
-
 void SysMngr::setup()
 {
     #ifdef LOGGING_SYSMNGR
@@ -60,8 +54,6 @@ void SysMngr::setup()
 
 void SysMngr::run()
 {
-    this->led.runBlinkTick();
-
     this->connMngr.run();
 
     this->modesMngr.inspectScheduledModesState();
@@ -82,67 +74,6 @@ void SysMngr::execComponentsChain(SysEvent e)
     this->led.handleEvent(e);
 }
 
-void SysMngr::btnCycleModes()
-{
-    // The 5 modes in cycle order
-    const SysMode  cycle[]       = { SysMode::SILENT_M,    // Quiet
-                                     SysMode::LOW_M,        // Regular
-                                     SysMode::MANUAL_3_M,   // Maximized
-                                     SysMode::AUTO_M,       // Auto
-                                     SysMode::OFF_M };      // Off
-
-    // Corresponding blink events (index-matched to cycle[])
-    const SysEvent blinkEvents[] = { SysEvent::BTN_BLINK_1_BLUE,
-                                     SysEvent::BTN_BLINK_2_BLUE,
-                                     SysEvent::BTN_BLINK_3_BLUE,
-                                     SysEvent::BTN_BLINK_4_BLUE,
-                                     SysEvent::BTN_BLINK_3_ORANGE };
-
-    // LED state after blink (index-matched to cycle[])
-    const bool leaveOn[]         = { true, true, true, true, true };
-    const uint8_t CYCLE_SIZE     = 5;
-
-    // Read current mode from EEPROM (written by setDefaultMode)
-    int8_t currMode;
-    EepromMngr::get("active-mode", "current", NULL, &currMode);
-
-    // Find position in cycle array.
-    // If current mode is NOT in cycle (Night=3, High=1, Manual1=6 etc.)
-    // → no match found → nextPos stays 0 → Quiet ✅ (outside-cycle requirement)
-    uint8_t nextPos = 0;
-    for (uint8_t i = 0; i < CYCLE_SIZE; i++)
-    {
-        if ((SysMode)currMode == cycle[i])
-        {
-            nextPos = (i + 1) % CYCLE_SIZE;
-            break;
-        } 
-    }
-
-    // ORDER IS CRITICAL — proven above in PROOF 4:
-
-    // 1. Write led-switch BEFORE blink or mode fires.
-    //    ENTER_LOW_M inside setDefaultMode reads this value.
-    //    If written after → ENTER_LOW_M reads old value.
-    EepromMngr::set("led-switch", "state", leaveOn[nextPos]);
-
-    // 2. Fire blink event → startBlink() → blinkActive=true → RGB owned
-    this->execComponentsChain(blinkEvents[nextPos]);
-
-    // 3. Set mode → fires ENTER_XXX_M → blinkActive guard skips RGB.control(false)
-    this->modesMngr.setDefaultMode(cycle[nextPos]);
-
-    // 4. AUTO_M real patch: setDefaultMode() switch has no AUTO_M case.
-    //    (Confirmed from SysMngr.cpp: no "case AUTO_M" in setDefaultMode.)
-    //    activateDefaultMode() handles it on boot but not here.
-    //    Firing ENTER_AUTO_M manually makes Fan set inSysMode=false
-    //    → Fan responds to AQI events again ✅
-    if (cycle[nextPos] == SysMode::AUTO_M)
-        this->execComponentsChain(SysEvent::ENTER_AUTO_M);
-
-    Publisher::publishEvent('S', "1.9.1", "support.button",
-        "Button cycled to: " + String((int8_t)cycle[nextPos]));
-}
 
 bool SysMngr::parseSingleSchedMode(String schedModeBlock, char* sTime, float *period, float *tmpPeriod)
 {
