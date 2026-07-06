@@ -46,6 +46,7 @@ String macAddrs = "";
 SerialLogHandler logHandler(LOG_LEVEL_ALL, {{ "app", LOG_LEVEL_ALL }, { "app.network", LOG_LEVEL_ALL } });
 SysMngr mngr;
 volatile uint8_t pendingBtnPresses = 0;
+//volatile bool modeChangePending = false;
 // Related to Quick mode feature
 // bool quickModeFlag = false;
 
@@ -251,6 +252,11 @@ void btnClickHandler(system_event_t, int param)
     if (system_button_clicks(param) == 1) pendingBtnPresses++;
 }
 
+// void btnClickHandler(system_event_t, int param)
+// {
+//     if (system_button_clicks(param) == 1) modeChangePending  = true;
+// }
+
 
 void earlySetup()
 {
@@ -317,9 +323,9 @@ void setup()
 
 void loop() 
 {
-    //Particle.process();
     mngr.run();
-    
+    //Particle.process();
+
     // Related to Quick mode feature
     uint8_t presses = 0;
     ATOMIC_BLOCK()
@@ -331,7 +337,13 @@ void loop()
         }
     }
 
-    if (presses > 0 && !mngr.isBlinkActive())
+    if (presses > 0 && !mngr.isLedBlinking())
         mngr.btnCycleModes();
-        
+    // if (modeChangePending)
+    // {
+    //     modeChangePending = false;
+    //     if (!mngr.isLedBlinking())
+    //         mngr.btnCycleModes();
+    // }
+
 }

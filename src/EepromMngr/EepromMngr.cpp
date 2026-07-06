@@ -98,7 +98,7 @@ void EepromMngr::initEeprom()
                 char schedNum[8] = "sched";
                 strcat(schedNum, String(i+1));
                 jDoc["scheduler"][schedNum]["whoami"] = (int8_t)SysMode::NOT_INIT;
-                jDoc["scheduler"][schedNum]["start-time"] = "00:00";
+                jDoc["scheduler"][schedNum]["start-time"] = NULL;
                 jDoc["scheduler"][schedNum]["period"] = 0.0;
             }
 
@@ -114,7 +114,7 @@ void EepromMngr::initEeprom()
                 char schedNum[8] = "sched";
                 strcat(schedNum, String(i+1));
                 jDoc["scheduler"][schedNum]["whoami"] = (int8_t)SysMode::NOT_INIT;
-                jDoc["scheduler"][schedNum]["start-time"] = "00:00";
+                jDoc["scheduler"][schedNum]["start-time"] = NULL;
                 jDoc["scheduler"][schedNum]["period"] = 0.0;
                 if (i+1 == 1)
                     jDoc["scheduler"][schedNum]["tmp-period"] = 0.0;
@@ -149,7 +149,7 @@ void EepromMngr::initEeprom()
             char schedNum[8] = "sched";
             strcat(schedNum, String(i+1));
             jDoc["scheduler"][schedNum]["whoami"] = (int8_t)SysMode::NOT_INIT;
-            jDoc["scheduler"][schedNum]["start-time"] = "00:00";
+            jDoc["scheduler"][schedNum]["start-time"] = NULL;
             jDoc["scheduler"][schedNum]["period"] = 0.0;
             if (i+1 == 1)
                 jDoc["scheduler"][schedNum]["tmp-period"] = 0.0;
@@ -684,6 +684,44 @@ void EepromMngr::set(const char *parentKey, const char *childKey, const char *se
 }
 
 
+void EepromMngr::get(const char *parentKey, const char *childKey, const char *secChildKey, char *target)
+{
+    if (EEPROM.read(EEPROM_IS_DEFINED_ADDRS) == 255)
+    {
+        #ifdef LOGGING_EEPROM
+            Log.info("[EepromMngr::set] - EEPROM marked as not initialized");
+        #endif
+        return;
+    }
+
+    EepromContent content;
+    EEPROM.get(EEPROM_DATA_OBJ_ADDRS, content); // Restore the EEPROM content
+
+    DynamicJsonDocument jDoc(JSON_DOC_SIZE);
+    DeserializationError err = deserializeJson(jDoc, content.jDoc);
+    if (err) return;
+
+    if (childKey == NULL)
+    {
+        *target = jDoc[parentKey];
+    }
+    else if (secChildKey == NULL)
+    {
+        const char *tmp = jDoc[parentKey][childKey];
+        if (tmp != nullptr)
+            strncpy(target, tmp, 5);
+        target[5] = '\0';
+    }
+    else
+    {
+        const char *tmp = jDoc[parentKey][childKey][secChildKey];
+        if (tmp != nullptr)
+            strncpy(target, tmp, 5);
+        target[5] = '\0';
+    }
+}
+
+
 void EepromMngr::set(const char *parentKey, const char *childKey, const char *secChildKey, unsigned long value)
 {
     if (EEPROM.read(EEPROM_IS_DEFINED_ADDRS) == 255)
@@ -724,7 +762,7 @@ void EepromMngr::set(const char *parentKey, const char *childKey, const char *se
 }
 
 
-void EepromMngr::get(const char *parentKey, const char *childKey, const char *secChildKey, char *target)
+void EepromMngr::get(const char *parentKey, const char *childKey, const char *secChildKey, unsigned long *target)
 {
     if (EEPROM.read(EEPROM_IS_DEFINED_ADDRS) == 255)
     {
@@ -735,7 +773,7 @@ void EepromMngr::get(const char *parentKey, const char *childKey, const char *se
     }
 
     EepromContent content;
-    EEPROM.get(EEPROM_DATA_OBJ_ADDRS, content);
+    EEPROM.get(EEPROM_DATA_OBJ_ADDRS, content); // Restore the EEPROM content
 
     DynamicJsonDocument jDoc(JSON_DOC_SIZE);
     DeserializationError err = deserializeJson(jDoc, content.jDoc);
@@ -743,21 +781,15 @@ void EepromMngr::get(const char *parentKey, const char *childKey, const char *se
 
     if (childKey == NULL)
     {
-        const char *tmp = jDoc[parentKey];
-        if (tmp != nullptr) { strncpy(target, tmp, 5); target[5] = '\0'; }
-        else { memset(target, 0, 6); }
+        *target = jDoc[parentKey];
     }
     else if (secChildKey == NULL)
     {
-        const char *tmp = jDoc[parentKey][childKey];
-        if (tmp != nullptr) { strncpy(target, tmp, 5); target[5] = '\0'; }
-        else { memset(target, 0, 6); }
+        *target = jDoc[parentKey][childKey];
     }
     else
     {
-        const char *tmp = jDoc[parentKey][childKey][secChildKey];
-        if (tmp != nullptr) { strncpy(target, tmp, 5); target[5] = '\0'; }
-        else { memset(target, 0, 6); }
+        *target = jDoc[parentKey][childKey][secChildKey];
     }
 }
 

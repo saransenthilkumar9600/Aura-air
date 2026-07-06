@@ -1,16 +1,14 @@
 #include "Publisher.h"
 
 
-retained uint8_t publishQueueRetainedBuffer[3064];
-
+retained uint8_t publishQueueRetainedBuffer[2048];
 PublishQueueAsync publishQueue(publishQueueRetainedBuffer, sizeof(publishQueueRetainedBuffer));
 
 
 void Publisher::setup()
 {
-    publishQueue.setup();
-    //
-    publishQueue.publish(NORMAL_EVENT,"publishQueue setup", PRIVATE, WITH_ACK);
+    //publishQueue.setup();
+    //publishQueue.publish(NORMAL_EVENT,"publishQueue setup", PRIVATE, WITH_ACK);
 }
 
 void Publisher::publishEvent(char event_t, String code, String name, String type, char *message)

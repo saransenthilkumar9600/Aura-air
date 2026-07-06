@@ -9,7 +9,7 @@
 #include "../../lib/PublishQueueAsyncRK/src/PublishQueueAsyncRK.h"
 
 
-#define PUB_DELAY         0
+#define PUB_DELAY         5
 #define NORMAL_EVENT      "auradb"
 #define SUPPORT_EVENT     "support"
 #define TEST_EVENT        "testdb"

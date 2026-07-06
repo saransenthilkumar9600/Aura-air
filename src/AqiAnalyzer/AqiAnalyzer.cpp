@@ -88,7 +88,7 @@ void AqiAnalyzer::run()
     {
         this->lastSensorsDataPublishedTimestamp = millis();
         
-        this->Eco2Arr[count] = this->sgp30.getEco2();
+        this->Eco2Arr[this->count] = this->sgp30.getEco2();
         this->count++;
 
         if(this->count >= ECO2_ARRAY_SIZE)
