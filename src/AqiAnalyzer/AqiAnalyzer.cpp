@@ -14,7 +14,7 @@ AqiAnalyzer::AqiAnalyzer() : fan(Fan::getInstance())
     for (uint8_t j = 0; j < ECO2_ARRAY_SIZE; j++){
         this->Eco2Arr[j] = 0;
     }
-     this->lastFiredAqiEvent = SysEvent::AQI_LESS_50;
+     
 }
 
 
@@ -160,25 +160,21 @@ void AqiAnalyzer::calcAqiMovingAvg(uint16_t currAqi)
 
 void AqiAnalyzer::analyze()
 {
-    float avg = this->aqiMovingAvg[this->aqiMovingMvgCurrIdx];
-    SysEvent newEvt;
-
-    if      (avg < 50.0f)  newEvt = SysEvent::AQI_LESS_50;
-    else if (avg < 100.0f) newEvt = SysEvent::AQI_LESS_100;
-    else if (avg < 200.0f) newEvt = SysEvent::AQI_LESS_200;
-    else                   newEvt = SysEvent::AQI_LESS_500;
-
-    if (newEvt != this->lastFiredAqiEvent)
-    {
-        this->lastFiredAqiEvent = newEvt;
-        this->execComponentsChainCallback(newEvt);
-    }
+    if (this->aqiMovingAvg[this->aqiMovingMvgCurrIdx] < 50.0)
+        this->execComponentsChainCallback(SysEvent::AQI_LESS_50);
+    else if (this->aqiMovingAvg[this->aqiMovingMvgCurrIdx] < 100.0)
+        this->execComponentsChainCallback(SysEvent::AQI_LESS_100);
+    else if (this->aqiMovingAvg[this->aqiMovingMvgCurrIdx] < 200.0)
+        this->execComponentsChainCallback(SysEvent::AQI_LESS_200);
+    else if (this->aqiMovingAvg[this->aqiMovingMvgCurrIdx] <= 500.0)
+        this->execComponentsChainCallback(SysEvent::AQI_LESS_500);
 }
 
 
 
 uint16_t AqiAnalyzer::getCo2AqiClass(int16_t Eco2)
 {
+
     if (Eco2 < 350)
         return 0;
     // GREAT
@@ -203,6 +199,8 @@ uint16_t AqiAnalyzer::getCo2AqiClass(int16_t Eco2)
     else if (Eco2 >= 5000)
         return 500;
     else return 0;
+
+    
 }
 
 
