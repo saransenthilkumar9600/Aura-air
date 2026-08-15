@@ -54,10 +54,10 @@ struct EepromContent
         TmpSchedulerData *schedulerDataArr;
         int8_t defaultMode;
         int8_t currentMode;
-        bool autoSilentSwitch;
         bool ledSwitch;
         int8_t timezone;
         bool fanSwitch;
+        bool autoSilentSwitch;
         LedSchedulerTmp ledScheduler;
 
         EepromTmpSavedContent() : schedSize((uint8_t)SchedSize::EMPTY), schedPosition((uint8_t)SchedPosition::FIRST), 

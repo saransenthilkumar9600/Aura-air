@@ -8,7 +8,7 @@
 #define SGP30_ADDRS             0x58 
 #define SGP30_DELAY             12
 #define SGP30_SELF_TEST_DELAY   250
-#define SGP30_SAMPLE_TIME       0
+#define SGP30_SAMPLE_TIME       1000
 #define SGP30_MAX_OUTPUT_VALUE  5000    
 
 
@@ -20,6 +20,7 @@ private:
     const uint8_t init_air_quality[2]          = {0x20, 0x03};
     const uint8_t measure_air_quality[2]       = {0x20, 0x08};
     int16_t voc, eco2;
+    uint32_t setupTimestamp; 
     bool doSetup, setupSucceeded;
     uint8_t setupAttempts;
     unsigned long lastMeasurement;

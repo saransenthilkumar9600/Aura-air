@@ -49,8 +49,9 @@ SensorErr HDC1080::measure(void)
 SensorErr HDC1080::setup(void)
 {
     Wire.beginTransmission(HDC1080_ADDRS);
-    Wire.write(0x02);       // Move the pointer register to configuration register
-    Wire.write(0x10); 
+    Wire.write(0x02);       // Configuration register address
+    Wire.write(0x10);       // Config MSB: acquisition mode (Temp + Humidity together)
+    Wire.write(0x00);       // Config LSB (reserved, must be 0x00)
     uint8_t res = Wire.endTransmission();
     if (res != 0)
     {

@@ -80,8 +80,9 @@ void RecoverMngr::panicRecover()
             #ifdef LOGGING_RECOV
                 Log.trace("[Recover::panicRecover] - 5 panic reset events occuered. Entering to Safe Mode...");
             #endif
-            delay(5);
+            
             System.enterSafeMode();
+            delay(5);
         }
         else // If no, increase the counter and update the 'lastPanic' time.
         {
@@ -120,19 +121,20 @@ void RecoverMngr::resetRecover()
             Log.info("[Recover::resetRecover] - User reset events counter: %d", currResetCounter);
         #endif
 
-        if (currResetCounter >= 5)
+        if (currResetCounter >= 30)
         {
             EEPROM.write(EEPROM_RESET_COUNTER_ADDRS, (uint8_t)0);
             EEPROM.put(EEPROM_RESET_LAST_EVT_ADDRS, (unsigned long)0);
             #ifdef LOGGING_RECOV
                 Log.trace("[Recover::resetRecover] - 5 user reset events occuered. Entering to Safe Mode...");
             #endif
-            delay(5);
+            
             System.enterSafeMode();
+            delay(5);
         }
         else // If no, increase the counter and update the 'lastReset' time.
         {
-            if (Time.now() - lastReset <= 120)
+            if (Time.now() - lastReset <= 600 )  //120
             {
                 EEPROM.write(EEPROM_RESET_COUNTER_ADDRS, (uint8_t)(currResetCounter + 1));
                 EEPROM.put(EEPROM_RESET_LAST_EVT_ADDRS, (unsigned long)Time.now());

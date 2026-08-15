@@ -194,7 +194,7 @@ void Fan::setFanSpeed(uint8_t pwmSpeed)
     }
     else
     {
-         if(this->drivePid = false)
+         if(this->drivePid == false)
         {
             this->drivePid = true;
         }

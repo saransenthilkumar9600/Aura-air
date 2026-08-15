@@ -21,7 +21,7 @@ private:
     bool doSetup, setupSucceeded;
     uint8_t setupAttempts;
     unsigned long lastMeasurement;
-
+    uint32_t setupTimestamp;
     SensorErr setup(void);
     SensorErr measure(void);
 

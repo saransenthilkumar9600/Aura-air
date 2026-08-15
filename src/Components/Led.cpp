@@ -368,7 +368,7 @@ void Led::runBlinkTick()
     {
         // ON phase complete → go to OFF
         RGB.color(0, 0, 0);
-        this->blinkPhase = false;
+        
         this->blinkCount++;
 
         if (this->blinkCount >= this->blinkTotal)
@@ -379,6 +379,7 @@ void Led::runBlinkTick()
             if (this->blinkLeaveOn)
                 RGB.control(false);       // release → Particle OS white fade ✅
             // else: RGB still controlled + black = LED stays OFF ✅
+            this->blinkPhase = false;
         }
     }
     else
